@@ -126,6 +126,15 @@ trait INFTNewStandard {
 
     // TODO: should move to new trait
     // Internal message
+    receive("ItemGranted") {
+        require(sender() == self.collection_address, "Invalid Sender");
+        self.is_granted = true;
+        self.ungranted_transfers = 0;
+        self.prev_owners = emptyMap();
+    }
+
+    // TODO: should move to new trait
+    // Internal message
     receive(msg: GetGrantData) {
         require(sender() == self.collection_address, "Invalid Sender");
 
@@ -136,15 +145,6 @@ trait INFTNewStandard {
                 prev_owners: self.prev_owners,
                 current_owner: self.owner
             }.toCell());
-    }
-
-    // TODO: should move to new trait
-    // Internal message
-    receive("ItemGranted") {
-        require(sender() == self.collection_address, "Invalid Sender");
-        self.is_granted = true;
-        self.ungranted_transfers = 0;
-        self.prev_owners = emptyMap();
     }
 
     get fun get_nft_data(): NftItemData {

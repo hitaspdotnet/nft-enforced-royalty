@@ -60,14 +60,21 @@ contract NftCollection with Ownable, Deployable, IHaveRoyalty {
         let restAmount: Int = context().value - minTonsForStorage - gasConsumption - debt;
         require(restAmount >= 0, "Insufficient amount sent");
         
+        if(debt > 0){
+            send(SendParameters{
+                to: self.royalty_params.destination,
+                value: debt,
+                mode: SendPayGasSeparately,
+                body: "NFT item granted".asComment()
+            });
+        }
+      
         send(SendParameters{
-            to: self.royalty_params.destination,
-            value: debt,
-            mode: SendPayGasSeparately,
-            body: "NFT item granted".asComment()
+            to: sender(),
+            value: restAmount,
+            mode: SendRemainingValue,
+            body: "ItemGranted".asComment()
         });
-
-        self.reply("ItemGranted".asComment());
     }
 
     get fun getNftItemInit(item_index: Int): StateInit {
