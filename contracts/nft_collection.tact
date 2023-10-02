@@ -57,12 +57,14 @@ contract NftCollection with Ownable, Deployable, IHaveRoyalty {
     }
     
     receive(msg: RequestGrant) {
+        let transfers = msg.ungranted_transfers + 1;    // user needs to pay for ungranted transfers + current one
+        
         // NFT can also provide some evidence on its price, but some money can go around it
         // currently, collection sets minimal price for purposes of royalty calculation
-        let this_nft_price: Int = self.nft_royalty_price;
+        let this_nft_price: Int = max(self.nft_royalty_price, (context().value - ton("0.5")) / transfers);
         
         let royalty_amount: Int = get_percent(this_nft_price, self.royalty_params.numerator, self.royalty_params.denominator);
-        let debt: Int = (msg.ungranted_transfers + 1) * royalty_amount;    // user needs to pay for ungranted transfers + current one
+        let debt: Int = transfers * royalty_amount;
         let restAmount: Int = context().value - minTonsForStorage - gasConsumption - debt;
         require(restAmount >= 0, "Insufficient amount sent");
         
