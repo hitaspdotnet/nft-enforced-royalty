@@ -15,10 +15,10 @@ trait INFTNewStandard {
 
 
     fun access_allowed(addr: Address) : Bool {
-        if(self.prev_owners.get(addr) != null){
+        if (self.prev_owners.get(addr) != null) {
             return true;
         }
-        if(addr == self.owner || addr == myAddress()){
+        if (addr == self.owner || addr == myAddress()) {
             return true;
         }
         
@@ -35,11 +35,11 @@ trait INFTNewStandard {
 
         // TODO: should move to new trait
         // self.validate_sender();
-        if(ctx.sender != myAddress()) {
+        if (ctx.sender != myAddress()) {
             self.is_granted = false;
             self.ungranted_transfers = self.ungranted_transfers + 1;
             self.prev_owners.set(self.owner, self.ungranted_transfers);
-        }else {
+        } else {
             self.is_granted = true;
             self.ungranted_transfers = 0;
             self.prev_owners = emptyMap();
@@ -96,7 +96,7 @@ trait INFTNewStandard {
     receive(msg: GrantedTransfer) {
         require(context().sender == self.owner, "Invalid Sender");
 
-        if(self.is_granted){
+        if (self.is_granted) {
             send(SendParameters{
                 to: myAddress(),
                 value: 0,
