@@ -13,18 +13,17 @@ trait INFTStandard {
         
         require(self.is_initialized, "Not initialized");
         require(ctx.sender == self.owner, "Invalid Owner");
-
+        
         let min: Int = minTonsForStorage - min(minTonsForStorage, myBalance());
         let required: Int = gasConsumption + msg.forward_amount + min;
         if (msg.forward_amount != 0) {
             required = required + ctx.readForwardFee();
         }
-
-        require(ctx.value >= required, "Invalid Amount");
-
-        let cashback: Int = ctx.value - gasConsumption - msg.forward_amount - min;
+        
+        let cashback: Int = ctx.value - required;
+        require(cashback >= 0, "Invalid Amount");
+        
         if (msg.forward_amount != 0) {
-            cashback = cashback - ctx.readForwardFee();
             send(SendParameters{
                 to: msg.new_owner,
                 value: msg.forward_amount,
