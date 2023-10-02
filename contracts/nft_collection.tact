@@ -9,8 +9,7 @@ fun get_percent(a: Int, percent: Int, factor: Int) : Int {
     if (factor == 0) {
         return 0;
     } else {
-        let val: Int = (a * percent) / factor;
-        return val;
+        return (a * percent) / factor;
     }
 }
 
@@ -20,20 +19,23 @@ contract NftCollection with Ownable, Deployable, IHaveRoyalty {
     collection_content: Cell;
     royalty_params: RoyaltyParams;
 
+    // Collection authors should work out the way of valuing their NFTs
+    nft_royalty_price: Int as coins = ton("1");
+    
     init(data: NftCollectionData) {
         self.owner = data.owner;
         self.collection_content = data.collection_content;
         self.royalty_params = data.royalty_params;
     }
-
+    
     receive(msg: RequestNftDeploy) {
         self.requireOwner();
         
         require(msg.item_index <= self.next_item_index, "Invalid index");
-
+        
         let nft_init: StateInit = self.getNftItemInit(msg.item_index);
         let nft_address: Address = contractAddress(nft_init);
-
+        
         send(SendParameters{
             to: nft_address,
             value: msg.item_value,
@@ -48,19 +50,25 @@ contract NftCollection with Ownable, Deployable, IHaveRoyalty {
                 individual_content: msg.item_content
             }.toCell()
         });
-
-        if(msg.item_index == self.next_item_index) {
+        
+        if (msg.item_index == self.next_item_index) {
             self.next_item_index = self.next_item_index + 1;
         }
     }
-
+    
     receive(msg: RequestGrant) {
-        let royalty_amount: Int = get_percent(context().value, self.royalty_params.numerator, self.royalty_params.denominator);
-        let debt : Int = msg.ungranted_transfers * royalty_amount;
+        let transfers = msg.ungranted_transfers + 1;    // user needs to pay for ungranted transfers + current one
+        
+        // NFT can also provide some evidence on its price, but some money can go around it
+        // currently, collection sets minimal price for purposes of royalty calculation
+        let this_nft_price: Int = max(self.nft_royalty_price, (context().value - ton("0.5")) / transfers);
+        
+        let royalty_amount: Int = get_percent(this_nft_price, self.royalty_params.numerator, self.royalty_params.denominator);
+        let debt: Int = transfers * royalty_amount;
         let restAmount: Int = context().value - minTonsForStorage - gasConsumption - debt;
         require(restAmount >= 0, "Insufficient amount sent");
         
-        if(debt > 0){
+        if (debt > 0) {
             send(SendParameters{
                 to: self.royalty_params.destination,
                 value: debt,
@@ -68,7 +76,7 @@ contract NftCollection with Ownable, Deployable, IHaveRoyalty {
                 body: "NFT item granted".asComment()
             });
         }
-      
+        
         send(SendParameters{
             to: sender(),
             value: restAmount,
@@ -76,7 +84,7 @@ contract NftCollection with Ownable, Deployable, IHaveRoyalty {
             body: "ItemGranted".asComment()
         });
     }
-
+    
     get fun getNftItemInit(item_index: Int): StateInit {
         return initOf NftItem(myAddress(), item_index);
     }
