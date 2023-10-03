@@ -57,7 +57,7 @@ contract NftCollection with Ownable, Deployable, IHaveRoyalty {
     }
     
     receive(msg: RequestGrant) {
-        let transfers = msg.ungranted_transfers + 1;    // user needs to pay for ungranted transfers + current one
+        let transfers: Int = msg.ungranted_transfers + 1;    // user needs to pay for ungranted transfers + current one
         
         // NFT can also provide some evidence on its price, but some money can go around it
         // currently, collection sets minimal price for purposes of royalty calculation
@@ -81,23 +81,14 @@ contract NftCollection with Ownable, Deployable, IHaveRoyalty {
             to: sender(),
             value: restAmount,
             mode: SendRemainingValue,
-            body: RequestGrant{
+            body: ItemGranted{
                 query_id: msg.query_id,
-                ungranted_transfers: self.ungranted_transfers,
-                current_owner: self.owner,
                 new_owner: msg.new_owner, 
                 response_destination: msg.response_destination, 
                 custom_payload: msg.custom_payload, 
                 forward_amount: msg.forward_amount,
                 forward_payload: msg.forward_payload
             }.toCell()
-        });
-      
-        send(SendParameters{
-            to: sender(),
-            value: restAmount,
-            mode: SendRemainingValue,
-            body: "ItemGranted".asComment()
         });
     }
     
