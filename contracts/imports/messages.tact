@@ -68,6 +68,20 @@ message RequestGrant {
   query_id: Int as uint64;
   ungranted_transfers: Int as uint16;
   current_owner: Address;
+  new_owner: Address; 
+  response_destination: Address; 
+  custom_payload: Cell?; 
+  forward_amount: Int as coins; 
+  forward_payload: Slice as remaining; 
+}
+
+message ItemGranted { 
+  query_id: Int as uint64;            
+  new_owner: Address; 
+  response_destination: Address; 
+  custom_payload: Cell?; 
+  forward_amount: Int as coins; 
+  forward_payload: Slice as remaining; 
 }
 
 message GrantedTransfer { 

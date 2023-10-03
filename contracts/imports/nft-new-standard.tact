@@ -96,8 +96,28 @@ trait INFTNewStandard {
     receive(msg: GrantedTransfer) {
         require(context().sender == self.owner, "Invalid Sender");
 
-        if(self.is_granted){
-            send(SendParameters{
+        send(SendParameters{
+            to: self.collection_address,
+            value: 0,
+            mode: SendRemainingValue,
+            body: RequestGrant{
+                query_id: msg.query_id,
+                ungranted_transfers: self.ungranted_transfers,
+                current_owner: self.owner,
+                new_owner: msg.new_owner, 
+                response_destination: msg.response_destination, 
+                custom_payload: msg.custom_payload, 
+                forward_amount: msg.forward_amount,
+                forward_payload: msg.forward_payload
+            }.toCell()
+        });
+    }
+
+    // TODO: should move to new trait
+    // Internal message
+    receive(msg: ItemGranted) {
+        require(sender() == self.collection_address, "Invalid Sender");
+        send(SendParameters{
                 to: myAddress(),
                 value: 0,
                 mode: SendRemainingValue,
@@ -110,27 +130,6 @@ trait INFTNewStandard {
                     forward_payload: msg.forward_payload
                 }.toCell()
             });
-        } else {
-            send(SendParameters{
-                to: self.collection_address,
-                value: 0,
-                mode: SendRemainingValue,
-                body: RequestGrant{
-                    query_id: msg.query_id,
-                    ungranted_transfers: self.ungranted_transfers,
-                    current_owner: self.owner
-                }.toCell()
-            });
-        }
-    }
-
-    // TODO: should move to new trait
-    // Internal message
-    receive("ItemGranted") {
-        require(sender() == self.collection_address, "Invalid Sender");
-        self.is_granted = true;
-        self.ungranted_transfers = 0;
-        self.prev_owners = emptyMap();
     }
 
     // TODO: should move to new trait
