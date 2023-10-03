@@ -1,5 +1,24 @@
 # nft-enforced-royalty
 
+This is a new type of NFT to enforce traders to payback royalties. It's writed for TonTech challenge about new NFT Standard to solve the problem related to royalty.
+
+In this new type, the item has a `granted` label, and if the item is traded outside of the collection, it will receive an ungranted label. Therefore, owners have the freedom to manage their NFT in any way they like. But they will be banned from the future services of the creator (Staking, etc) and their item will be labeled as **Unsupported By Collection**.
+
+This is the main goal, but in addition to this, we can use the pressure lever to trade through collection and payback royalties:
+
+### Damage
+> Unverified item have a **list of previous owners' addresses** (except the creator) and accept **transfer** request from old owners. *Therefore, trading this NFT is very risky*.
+
+### Repair
+> To convert a **destroyed/unsupported** NFT to be a **verified** item in the collection: contract can calculate the times of transactions outside the collection and receive royalties based on that and the rules defined by the creator.
+
+## Heal Shaya
+If you find this repo useful please consider supporting my efforts by sending some TONs the address:
+
+```
+EQDOoIxJLoVnuOCO7Vze3daW3Jm_EHQt5X_nyakb3c4c1WmD
+```
+
 ## Project structure
 
 -   `contracts` - source code of all the smart contracts of the project and their dependencies.
