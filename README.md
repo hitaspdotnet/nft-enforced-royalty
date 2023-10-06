@@ -16,7 +16,7 @@ This is the main goal, but in addition to this, we can use the pressure lever to
 If you find this repo useful please consider supporting my efforts by sending some TONs the address:
 
 ```
-EQDOoIxJLoVnuOCO7Vze3daW3Jm_EHQt5X_nyakb3c4c1WmD
+UQCjdCk7p7YatNMNpjVND1vMp7HqnF28u2N49P-fPeB93GyG
 ```
 
 ## Project structure
