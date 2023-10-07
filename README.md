@@ -1,6 +1,6 @@
 # nft-enforced-royalty
 
-This is a new type of NFT to enforce traders to payback royalties. It's writed for TonTech challenge about new NFT Standard to solve the problem related to royalty.
+This is a new type of NFT to enforce traders to payback royalties. It's written for TonTech challenge about new NFT Standard to solve the problem related to royalty.
 
 In this new type, the item has a `granted` label, and if the item is traded outside of the collection, it will receive an ungranted label. Therefore, owners have the freedom to manage their NFT in any way they like. But they will be banned from the future services of the creator (Staking, etc) and their item will be labeled as **Unsupported By Collection**.
 
