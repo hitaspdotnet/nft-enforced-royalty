@@ -3,7 +3,7 @@
 This is a new type of NFT to enforce traders to payback royalties. It's written for TonTech challenge about new NFT Standard to solve the problem related to royalty.
 
 In this new type, the item has a `exclusive` label, and if the item is traded outside of the collection, it will receive an non-exclusive label. Therefore, owners have the freedom to manage their NFT in any way they like. Based on this label, collections decide how to provide them with future service (Staking, etc) and their item will be labeled as **Unsupported By Collection**.<br/>
-To transfer intellectual property (when `ungranted_transfers = 0`), the transaction must contain value more than royalty at mint's time *(roylty * mint pric)*. <br/>
+To transfer intellectual property (when `ungranted_transfers = 0`), the transaction must contain value more than royalty at mint's time *(roylty * mint price)*. <br/>
 To transfer intellectual property (when `ungranted_transfers > 0`), the transaction must contain value more than the result of multiplying the number of transactions in compensation *(ungranted_transfers * compensation)*.
 
 
