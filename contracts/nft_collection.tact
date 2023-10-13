@@ -9,7 +9,8 @@ fun get_percent(a: Int, percent: Int, factor: Int) : Int {
     if (factor == 0) {
         return 0;
     } else {
-        return (a * percent) / factor;
+        let n: Int = (a * percent) / factor;
+        return n;
     }
 }
 
@@ -66,7 +67,7 @@ contract NftCollection with Ownable, Deployable, IHaveRoyalty {
         let royalty_amount: Int = get_percent(this_nft_price, self.royalty_params.numerator, self.royalty_params.denominator);
         let debt: Int = transfers * royalty_amount;
         let restAmount: Int = context().value - minTonsForStorage - gasConsumption - debt;
-        require(restAmount >= 0, "Insufficient amount sent");
+        require(restAmount > 0, "Insufficient amount sent");
         
         if (debt > 0) {
             send(SendParameters{
