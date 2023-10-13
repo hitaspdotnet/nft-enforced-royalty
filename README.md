@@ -12,7 +12,7 @@ The transfer must be done by Collection, the amount of royalty sent by the marke
 
 **To legally transfer ownership:**
 
-when `ungranted_transfers = 0`: the transaction must contain value more than royalty at mint's time *(roylty * mint price)*. <br/>
+when `ungranted_transfers = 0`: the transaction must contain value more than royalty at mint's time *(which I named compensation)*. <br/>
 
 when `ungranted_transfers > 0`: the transaction must contain value more than the result of multiplying the number of transactions in compensation *(ungranted_transfers * (compensation || roylty))*.
 ```
