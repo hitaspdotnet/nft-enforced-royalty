@@ -21,28 +21,29 @@ let compensation: Int = max(self.royalty_params.compensation, (context().value -
 let debt: Int = transfers * compensation;
 let restAmount: Int = context().value - commonFees - debt;
 
-// pay to transfer
+// enforce pay to transfer
 // require(restAmount > 0, "Insufficient amount sent");
-
+// OR 
 // Reduce debt
 // do {
-//    // send royalty to creator and reduce ungranted_transfers
-// } until (restAmount > 0)
-
+//    // send royalty to creator and reduce ungranted_transfers 
+// } until (ungranted_transfers > 0)
+// OR friendly, process owner request
 if(restAmount > 0) {
-    //send official transfer;
+    //send official transfer and verify item
 } else {
-    //send unofficial transfer;
+    //send unofficial transfer and increase ungranted_transfers
 }
 ```
 
 Collection does not reject any transfer request, even if the amount of context value is not enough to pay royalty, but changes the number of unofficial transfers. Therefore, owners have the freedom to manage their NFT in any way they like. 
 
-Based on `exclusive` status, collections decide how to provide them with future service (Staking, etc). For example their item will be labeled as **Unsupported By Collection** in the collection explorer.<br/>
+Based on `exclusive` status, collections decide how to provide them with future service (Staking, etc). For example their item will be labeled as **Unsupported By Collection** in the collection explorer.
 
 ## Summary
-This is the main goal, we can use the pressure lever to trade through collection and payback royalties:
+This is the main goal, **Legal transfer transaction must be done by collection** and not directly by the marketplace. 
 
+So, we can use the pressure lever to trade through collection and payback royalties:
 #### Damage
 > Unverified item have a **list of previous owners' addresses** (except the creator) and accept **transfer** request from old owners. *Therefore, trading this NFT is very risky*.
 
@@ -56,27 +57,10 @@ If you find this repo useful please consider supporting my efforts by sending so
 UQCjdCk7p7YatNMNpjVND1vMp7HqnF28u2N49P-fPeB93GyG
 ```
 
-## Project structure
+## Special Thanks
+I am very grateful for the advice and participation of my dear friend [@ProgramCrafter](https://github.com/ProgramCrafter)
 
--   `contracts` - source code of all the smart contracts of the project and their dependencies.
--   `wrappers` - wrapper classes (implementing `Contract` from ton-core) for the contracts, including any [de]serialization primitives and compilation functions.
--   `tests` - tests for the contracts.
--   `scripts` - scripts used by the project, mainly the deployment scripts.
-
-## How to use
-
-### Build
-
-`npx blueprint build` or `yarn blueprint build`
-
-### Test
-
-`npx blueprint test` or `yarn blueprint test`
-
-### Deploy or run another script
-
-`npx blueprint run` or `yarn blueprint run`
-
-### Add a new contract
-
-`npx blueprint create ContractName` or `yarn blueprint create ContractName`
+# Important note
+Be careful when using my code. As I said before, this is a test implementation of the challenge and is **NOT** a deliverable product.
+However, you can contact me for more details. 
+[@hitasp](https://hitasp.t.me)
